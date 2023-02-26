@@ -1,17 +1,18 @@
 const tabuleiro = document.getElementById('tabuleiro');
 
 const imagens = [
-    'figura1.png',
-    'figura2.png',
-    'figura3.png',
-    'figura4.png',
-    'figura5.png',
-    'figura6.png',
-    'figura7.png',
-    'figura8.png',
-    'figura9.png',
-    'figura10.png',
-    'figura11.png'
+    'Slide1.PNG',
+    'Slide2.PNG',
+    'Slide3.PNG',
+    'Slide4.PNG',
+    'Slide5.PNG',
+    'Slide6.PNG',
+    'Slide7.PNG',
+    'Slide8.PNG',
+    'Slide9.PNG',
+    'Slide10.PNG',
+    'Slide11.PNG',
+    'Slide12.PNG'
 ];
 
 let codigoHTML = '';
@@ -19,7 +20,7 @@ imagens.forEach(img => {
     codigoHTML += `
         <div class="memory-card">
             <img class = "frente-carta" src="images/cards Eeveelution/${img}">
-            <img class= "fundo-carta" src="images/cards Eeveelution/figura12.png">
+            <img class= "fundo-carta" src="images/cards Eeveelution/sLIDE13.PNG">
         </div>
         `;
 });

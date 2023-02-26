@@ -5,13 +5,28 @@
 }
 
 .memory-card {
-    width: 200px;
+    width: 250px;
+    height: 250px;
     display: flex;
 
 }
 
 .memory-card img {
-    width: 100px;
-    border: 1px solid black;
-    border-radius: 9px;
+    width: 100%;
+    position: relative;
+}
+
+#tabuleiro {
+    width: 640px;
+    height: 640px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.frente-carta,
+.fundo-carta {
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
