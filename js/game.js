@@ -1,4 +1,8 @@
 const grid = document.querySelector('.grid');
+const spanPlayer = document.querySelector('.player');
+const pontosPlayer = document.querySelector('.placar');
+
+
 
 const pokemons = ['Slide1', 'Slide2', 'Slide3', 'Slide4', 'Slide5', 'Slide6', 'Slide7', 'Slide8', 'Slide9', 'Slide10', 'Slide11', 'Slide12', 'Slide13', 'Slide14']
 
@@ -10,6 +14,10 @@ const createElement = (tag, className) => {
 
 let firstCard = '';
 let secondCard = '';
+let acertos = 0;
+let erros = 0;
+let pontoRodada = 0;
+
 
 const checkEndGame = () => {
     const disableCards = document.querySelectorAll('.disable-card');
@@ -24,9 +32,12 @@ const checkCards = () => {
     const firstCharacter = firstCard.getAttribute('data-pokemon');
     const secondCharacter = secondCard.getAttribute('data-pokemon');
 
+
     console.log(firstCharacter, secondCharacter);
 
     if (firstCharacter === secondCharacter) {
+
+        acertos++;
 
         firstCard.firstChild.classList.add('disable-card');
         secondCard.firstChild.classList.add('disable-card');
@@ -34,9 +45,12 @@ const checkCards = () => {
         firstCard = '';
         secondCard = '';
 
+
+
         checkEndGame();
 
     } else {
+        erros++;
         setTimeout(() => {
 
             firstCard.classList.remove('reveal-card');
@@ -45,9 +59,18 @@ const checkCards = () => {
             firstCard = '';
             secondCard = '';
 
+
+
         }, 500);
+
     }
 
+    pontoRodada = acertos - erros;
+
+    console.log("Meus Acertos ", acertos);
+    console.log("Meus eRROS ", erros);
+    console.log("Meus pontos ", pontoRodada);
+    pontosPlayer.setAttribute(pontoRodada);
 
 }
 
@@ -100,4 +123,12 @@ const loadGame = () => {
     });
 }
 
-loadGame();
+window.onload = () => {
+
+    const playerName = localStorage.getItem('player');
+    spanPlayer.innerHTML = playerName;
+
+    loadGame();
+}
+
+
