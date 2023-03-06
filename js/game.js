@@ -1,120 +1,103 @@
-const tabuleiro = document.getElementById('tabuleiro');
+const grid = document.querySelector('.grid');
 
-const imagens = [
-    'Slide1.PNG',
-    'Slide2.PNG',
-    'Slide3.PNG',
-    'Slide4.PNG',
-    'Slide5.PNG',
-    'Slide6.PNG',
-    'Slide7.PNG',
-    'Slide8.PNG',
-    'Slide9.PNG',
-    'Slide10.PNG',
-    'Slide11.PNG',
-    'Slide12.PNG'
-];
+const pokemons = ['Slide1', 'Slide2', 'Slide3', 'Slide4', 'Slide5', 'Slide6', 'Slide7', 'Slide8', 'Slide9', 'Slide10', 'Slide11', 'Slide12', 'Slide13', 'Slide14']
 
-const beta = [
-    'Slide1.PNG',
-    'Slide2.PNG',
-    'Slide3.PNG',
-    'Slide4.PNG',
-    'Slide5.PNG',
-    'Slide6.PNG',
-    'Slide7.PNG',
-    'Slide8.PNG',
-    'Slide9.PNG',
-    'Slide10.PNG',
-    'Slide11.PNG',
-    'Slide12.PNG'
-];
-
-/*   ---   Algoritmo de Fisher-Yates para embaralhamento de arrays   ---   */
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+const createElement = (tag, className) => {
+    const element = document.createElement(tag);
+    element.className = className;
+    return element;
 }
 
-shuffle(imagens);
-shuffle(beta);
+let firstCard = '';
+let secondCard = '';
 
-let codigoHTML = '';
+const checkEndGame = () => {
+    const disableCards = document.querySelectorAll('.disable-card');
 
-imagens.forEach(img => {
-    codigoHTML += `
-        <div class="memory-card">
-            <img class = "frente-carta" src="images/cards Eeveelution/${img}">
-            <img class= "fundo-carta" src="images/cards Eeveelution/verso.PNG">
-        </div>
-        `;
-});
-
-let betaHTML = '';
-
-beta.forEach(imgB => {
-    betaHTML += `
-        <div class="memory-card">
-            <img class = "frente-carta" src="images/betacards Eeveelution/${imgB}">
-            <img class= "fundo-carta" src="images/betacards Eeveelution/verso.PNG">
-        </div>
-        `;
-});
-
-
-tabuleiro.innerHTML = codigoHTML + betaHTML;
-
-const cartas = document.querySelectorAll(".memory-card");
-
-let firstCard, secondCard;
-let lockCards = false;
-
-function flipCard() {
-    console.log(this);
-    if (lockCards) return false;
-    this.classList.add("virar");
-
-    if (!firstCard) {
-        firstCard = this;
-        return false;
+    if (disableCards.length === 28) {
+        alert('Parabéns, você conseguiu!');
     }
 
-    secondCard = this;
-
-    checkForMatch();
 }
 
+const checkCards = () => {
+    const firstCharacter = firstCard.getAttribute('data-pokemon');
+    const secondCharacter = secondCard.getAttribute('data-pokemon');
 
-function checkForMatch() {
-    let isMatch = firstCard.dataset.card === secondCard.dataset.betacard || firstCard.dataset.card === secondCard.dataset.card;
+    console.log(firstCharacter, secondCharacter);
 
-    !isMatch ? unFlipCards() : resetCards(isMatch);
-}
+    if (firstCharacter === secondCharacter) {
 
-function unFlipCards() {
-    lockCards = true;
-    setTimeout(() => {
-        firstCard.classList.remove("virar");
-        secondCard.classList.remove("virar");
+        firstCard.firstChild.classList.add('disable-card');
+        secondCard.firstChild.classList.add('disable-card');
 
-        resetCards();
-    }, 1000);
-}
+        firstCard = '';
+        secondCard = '';
 
-function resetCards(isMatch = false) {
-    if (isMatch) {
-        firstCard.removeEventListener("click", flipCard);
-        secondCard.removeEventListener("click", flipCard);
+        checkEndGame();
+
+    } else {
+        setTimeout(() => {
+
+            firstCard.classList.remove('reveal-card');
+            secondCard.classList.remove('reveal-card');
+
+            firstCard = '';
+            secondCard = '';
+
+        }, 500);
     }
 
-    [firstCard, secondCard, lockCards] = [null, null, false];
-}
-
-function virar() {
-    this.classList.add("virar");
 
 }
 
-cartas.forEach(c => c.addEventListener('click', flipCard));
+const revealCard = ({ target }) => {
+
+    if (target.parentNode.className.includes('reveal-card')) {
+        return;
+    }
+
+    if (firstCard === '') {
+        target.parentNode.classList.add('reveal-card');
+        firstCard = target.parentNode;
+    }
+    else if (secondCard == '') {
+        target.parentNode.classList.add('reveal-card');
+        secondCard = target.parentNode;
+
+        checkCards();
+    }
+
+}
+
+
+const createCard = (pokemon) => {
+
+    const card = createElement('div', 'card');
+    const front = createElement('div', 'face front');
+    const back = createElement('div', 'face back');
+
+    front.style.backgroundImage = `url('../images/pokemons/pokemons/${pokemon}.PNG')`;
+
+    card.appendChild(front);
+    card.appendChild(back);
+
+    card.addEventListener('click', revealCard);
+    card.setAttribute('data-pokemon', pokemon);
+
+    return card;
+}
+
+const loadGame = () => {
+
+    const duplicatePokemons = [...pokemons, ...pokemons];
+
+    const shuffledArray = duplicatePokemons.sort(() => Math.random() - 0.5);
+
+    duplicatePokemons.forEach((pokemon) => {
+        const card = createCard(pokemon);
+        grid.appendChild(card);
+    });
+}
+
+loadGame();
