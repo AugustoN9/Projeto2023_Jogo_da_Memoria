@@ -1,8 +1,7 @@
 const grid = document.querySelector('.grid');
 const spanPlayer = document.querySelector('.player');
+const timer = document.querySelector('.timer');
 const pontosPlayer = document.querySelector('.placar');
-
-
 
 const pokemons = ['Slide1', 'Slide2', 'Slide3', 'Slide4', 'Slide5', 'Slide6', 'Slide7', 'Slide8', 'Slide9', 'Slide10', 'Slide11', 'Slide12', 'Slide13', 'Slide14']
 
@@ -23,7 +22,13 @@ const checkEndGame = () => {
     const disableCards = document.querySelectorAll('.disable-card');
 
     if (disableCards.length === 28) {
-        alert('Parabéns, você conseguiu!');
+        clearInterval(this.loop);
+        //usando alertas personalizados sweetalert2
+        Swal.fire(
+            `Parabéns ${spanPlayer.innerHTML}!`,
+            `Seu tempo foi de ${timer.innerHTML}`,
+            'success'
+        );
     }
 
 }
@@ -69,6 +74,9 @@ const checkCards = () => {
 
     console.log("Meus Acertos ", acertos);
     console.log("Meus eRROS ", erros);
+    pontosPlayer.innerHTML = erros;
+
+
     console.log("Meus pontos ", pontoRodada);
     pontosPlayer.setAttribute(pontoRodada);
 
@@ -123,11 +131,19 @@ const loadGame = () => {
     });
 }
 
+const startTimer = () => {
+    this.loop = setInterval(() => {
+        const currentTime = +timer.innerHTML;
+        timer.innerHTML = currentTime + 1;
+    }, 1000);
+}
+
 window.onload = () => {
 
     const playerName = localStorage.getItem('player');
     spanPlayer.innerHTML = playerName;
 
+    startTimer();
     loadGame();
 }
 
